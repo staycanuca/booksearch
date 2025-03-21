@@ -8,56 +8,62 @@
 
     <link rel="stylesheet" href="css/index.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+        }
+        .btn {
+            padding: 12px 18px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .btn-primary {
+            background-color: #ff9800;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #e68900;
+            transform: scale(1.05);
+        }
+        select, input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #f8f8f8;
+            color: #333;
+        }
+        select {
+            appearance: none;
+            background: #ffffff;
+            color: #333;
+            padding-right: 30px;
+            cursor: pointer;
+        }
+    </style>
+	
+	
 </head>
 <body>
     <div class="container">
-        <!-- Engine Switcher -->
-        <div class="engine-swticher">
-            <a href="https://ravebooksearch.com">> Book Search</a>
-        </div>
 
-        <!-- Mobile engine switcher -->
-        <div class="toggle-container">            
-            <a href="https://ravebooksearch.com" id="primary" class="toggle-btn">Books</a>
-        </div>
-
-        <!-- Notification Centre -->
-        <div class="engine-swticher-2">
-            <!-- First Item: Donation message and button-->
-            <div class="item">
-                <div id="donate-button-container">
-                    <a class="tips">If you think this website has helped you, please consider donating...</a>
-                    <div id="donate-button"></div>
-                    <!-- Script for Donation button, provided by PayPal -->
-                    <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
-                    <script>
-                    PayPal.Donation.Button({
-                    env:'production',
-                    hosted_button_id:'XMFZ3K79YGDFG',
-                    image: {
-                    src:'https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif',
-                    alt:'Donate with PayPal button',
-                    title:'PayPal - The safer, easier way to pay online!',
-                    }
-                    }).render('#donate-button');
-                    </script>
-                </div>
-                <span class="close-btn">X</span>
-            </div>
-            <div class="item">
-                <span>It is recommended to use an AdBlocker such as uBlock Origin when visiting download pages.</span>
-                <span class="close-btn">X</span>
-            </div>
-            <div class="item">
-                <span>If the search result is a website homepage, it indicates that the website hosts the book, and you may need to search within the site to locate the download page.</span>
-                <span class="close-btn">X</span>
-            </div>
-            <div class="item">
-                <span>For more precise results, include the Author Name and prefixes such as 'The' and 'A' with the Book Titles</span>
-                <span class="close-btn">X</span>
-            </div>
-        </div>
-        <!-- Notification Centre javascript, controls cross-refresh hiding of items -->
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 // Retrieve hidden items from localStorage
@@ -128,15 +134,85 @@
                 { 
                 var searchBox =  document.getElementById("gsc-i-id1");
                 searchBox.placeholder="Search for your favourite eBooks";
-                searchBox.title="Rave Book Search Engine"; 
+                searchBox.title="Book Search Engine"; 
                 }
             </script>
             <gcse:search class="searchbox"></gcse:search>
-            <div class="bookswitch">
-                <a href="index-audiobooks.html" class="bookswitch">Switch to Audiobook Search ></a>
-            </div>
         </div>
-    </div>
+
+    <h1>FMAM Radiologie Downloader</h1>
+    <br>
+    <select id="serviceSelect">
+        <option value="scribd">Scribd</option>
+        <option value="academia">Academia.edu</option>
+    </select>
+    <br><br>
+    <input type="text" id="documentUrl" placeholder="Introdu linkul documentului">
+    <br><br>
+    <button class="btn btn-primary" id="download1">Download PDF 1</button>
+    <button class="btn btn-primary" id="download2">Download PDF 2</button>
+    <button class="btn btn-primary" id="download3">Download PDF 3</button>
+</div>
+
+<script>
+    function isValidAcademiaLink(link) {
+        return link.startsWith('https://www.academia.edu');
+    }
+
+    function isValidScribdLink(link) {
+        return link.includes('scribd.com/document/');
+    }
+
+    function getScribdIdAndTitle(link) {
+        const match = link.match(/scribd\.com\/document\/(\d+)\/(.+)/);
+        if (!match) return null;
+        let title = match[2].replace(/_/g, '-').replace(/[^a-zA-Z0-9-]/g, '');
+        return { id: match[1], title: title };
+    }
+
+    function generateAcademiaDownloadLink(inputLink, option) {
+        switch (option) {
+            case 1: return inputLink.replace('https://www.academia.edu', 'https://downacademia.com');
+            case 2: return `https://docdownloader.com/init/academia?url=${encodeURIComponent(inputLink)}`;
+            case 3: 
+                const parts = inputLink.split('/');
+                return `https://acadownload.com/doc/${parts[4]}/${parts[3]}`;
+        }
+    }
+
+    function generateScribdDownloadLink(inputLink, option) {
+        const docInfo = getScribdIdAndTitle(inputLink);
+        if (!docInfo) return null;
+        const { id, title } = docInfo;
+        switch (option) {
+            case 1: return `https://compress-pdf.vietdreamhouse.com/?fileurl=https://scribd.downloader.tips/pdownload/${id}/${title}&title=${title.replace(/-/g, '+')}`;
+            case 2: return `https://compress.tacz.info/?fileurl=https://scribd.vpdfs.com/pdownload/${id}/${title}&title=${title.replace(/-/g, '+')}`;
+            case 3: return `https://ilide.info/docgeneratev2?fileurl=https://scribd.vdownloaders.com/pdownload/${id}/${title}&title=${title.replace(/-/g, '+')}`;
+        }
+    }
+
+    document.getElementById('download1').addEventListener('click', () => handleDownload(1));
+    document.getElementById('download2').addEventListener('click', () => handleDownload(2));
+    document.getElementById('download3').addEventListener('click', () => handleDownload(3));
+
+    function handleDownload(option) {
+        const inputLink = document.getElementById('documentUrl').value.trim();
+        const service = document.getElementById('serviceSelect').value;
+        let downloadLink = null;
+        
+        if (service === 'academia' && isValidAcademiaLink(inputLink)) {
+            downloadLink = generateAcademiaDownloadLink(inputLink, option);
+        } else if (service === 'scribd' && isValidScribdLink(inputLink)) {
+            downloadLink = generateScribdDownloadLink(inputLink, option);
+        }
+        
+        if (downloadLink) {
+            window.open(downloadLink, '_blank');
+        } else {
+            alert("Te rog să introduci un URL valid.");
+        }
+    }
+</script>
 
 </body>
 </html>
