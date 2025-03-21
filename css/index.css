@@ -15,9 +15,7 @@ body {
   background-color: var(--bg-color);
 }
 
-.container {
-  height: 100%;
-}
+
 
 /* Book Switcher */
 .bookswitch, .engine-swticher a, .games-found a, .terms a {
@@ -38,7 +36,7 @@ body {
         position: relative;
         text-align: left;
         top: 25%;
-        width: 40%;
+        width: 90%;
     }
     
     .maindiv img {
